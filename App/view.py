@@ -15,7 +15,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+#  *
  * You should have received a copy of the GNU General Public License
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
@@ -24,8 +24,11 @@ import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
+import sys
 assert cf
 
+default_limit = 1000
+sys.setrecursionlimit(default_limit*10)
 
 """
 La vista se encarga de la interacción con el usuario
@@ -83,7 +86,16 @@ def printBestBooks(books):
 
 def printSortResults(ord_books, sample=10):
     # TODO completar modificaciones para el laboratorio 4
-    pass
+    size = lt.size(ord_books)
+    if size > sample:
+        print("Los primeros ", sample, " libros ordenados son:")
+        i=1
+        while i <= sample:
+            book = lt.getElement(ord_books,i)
+            print('Titulo: ' + book['title'] + ' ISBN: ' +
+                book['isbn'] + ' Rating: ' + book['average_rating'])
+            i+=1
+
 
 catalog = None
 
@@ -123,7 +135,8 @@ while True:
         size = input("Indique tamaño de la muestra: ")
         result = controller.sortBooks(catalog, int(size))
         print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
-                                          str(result))
+                                          str(result[0]))
+        printSortResults(result[1])
 
     else:
         sys.exit(0)
